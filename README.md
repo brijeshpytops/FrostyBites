@@ -72,3 +72,21 @@ This password is too common.
 Bypass password validation and create user anyway? [y/N]: y
 Superuser created successfully.
 
+
+<!--  templates config -->
+
+[main-apps-dir]/[app-name]/
+    - templates/
+        - [app-name]
+            - index.html
+            - products.html
+            - profile.html
+
+[main-apps-dir]/[app-name]/
+    - static/
+        - [app-name]
+            - CSS
+            - JS
+            - Fonts
+            - Images
+
