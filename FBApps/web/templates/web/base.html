@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} {% endblock %}| FROSTYBITES</title>
+    <!-- Tailwind CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Heroicons -->
+    <script src="https://unpkg.com/heroicons@2.0.18/dist/heroicons.min.js"></script>
+
+    {% block style %} {% endblock %}
+  </head>
+  <body>
+    <header class="text-gray-600 body-font">
+      <div
+        class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"
+      >
+        <a
+          class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            class="w-10 h-10 text-white p-2 bg-yellow-500 rounded-full"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+            ></path>
+          </svg>
+          <span class="ml-3 text-xl">Frostybites</span>
+        </a>
+        <nav
+          class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center"
+        >
+          <a class="mr-5 hover:text-gray-900">Catagories</a>
+          <a class="mr-5 hover:text-gray-900">Latest collection</a>
+          <a class="mr-5 hover:text-gray-900">On trend</a>
+          <a class="mr-5 hover:text-gray-900">Customize Cake</a>
+        </nav>
+        <a
+          class="inline-flex items-center bg-gray-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0"
+        >
+          Register
+        </a>
+        <a
+          class="inline-flex items-center bg-gray-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mx-2 mt-4 md:mt-0"
+        >
+          Login
+        </a>
+        <a
+          class="inline-flex items-center bg-green-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mx-2 mt-4 md:mt-0"
+        >
+          Profile
+        </a>
+        <a
+          class="inline-flex items-center bg-red-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mx-2 mt-4 md:mt-0"
+        >
+          Logout
+        </a>
+      </div>
+    </header>
+
+    {% block body %} {% endblock %}
+
+    <!-- Alpine.js -->
+    <script
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </body>
+</html>
