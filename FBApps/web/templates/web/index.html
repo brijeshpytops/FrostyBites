@@ -1,11 +1,210 @@
-{% extends 'web/base.html'%}
+{% extends 'web/base.html'%} {% block title %} Index {% endblock %} {% block style %} {% endblock %} {% block body %}
+<section class="text-gray-600 body-font">
+    <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
+      <div class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
+        <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
+          Delight in Every Bite <br class="hidden lg:inline-block" />with Our Freshly <span class="text-yellow-400 font-bold">Baked Cakes</span> 
+        </h1>
+        <p class="mb-8 leading-relaxed">
+          Experience the magic of our handcrafted cakes made with the finest ingredients. From birthdays to weddings, each creation is made with love to make your moments special. Satisfy your sweet tooth with our wide range of flavors, delivered fresh to your doorstep.
+        </p>
+        <div class="flex justify-center">
+          <button class="inline-flex text-white bg-yellow-400 border-0 py-2 px-6 focus:outline-none hover:bg-yellow-600 rounded text-lg">
+            Order Now
+          </button>
+          <a href="{% url 'catagories_view' %}" class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">
+            Explore Menu
+          </a>
+        </div>
+      </div>
+      <div class="lg:max-w-lg lg:w-full md:w-1/2 w-6/6">
+        <img class="object-cover object-center rounded" alt="cakes" src="https://www.sendbestgift.com/assets/images/product/2f96256259019cc4a9f957b8f26cd357.webp" />
+      </div>
+    </div>
+  </section>
 
-{% block title %}
-Index
-{% endblock %}
+  <section class="text-gray-600 body-font overflow-hidden">
+    <div class="container px-5 py-24 mx-auto">
+      <div class="flex flex-col text-center w-full mb-20">
+        <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">Cake Shop Packages</h1>
+        <p class="lg:w-2/3 mx-auto leading-relaxed text-base text-gray-500">
+          Choose the perfect cake package for your special occasion. Whether it's a small gathering or a grand celebration, we have something sweet for everyone.
+        </p>
+        <div class="flex mx-auto border-2 border-yellow-400 rounded overflow-hidden mt-6">
+          <button class="py-1 px-4 bg-yellow-400 text-white focus:outline-none">Monthly</button>
+          <button class="py-1 px-4 focus:outline-none">Annually</button>
+        </div>
+      </div>
+      <div class="flex flex-wrap -m-4">
+        <!-- Starter Package -->
+        <div class="p-4 xl:w-1/3 md:w-1/2 w-full">
+          <div class="h-full p-6 rounded-lg border-2 border-yellow-400 flex flex-col relative overflow-hidden">
+            <h2 class="text-sm tracking-widest title-font mb-1 font-medium">STARTER</h2>
+            <h1 class="text-5xl text-gray-900 pb-4 mb-4 border-b border-gray-200 leading-none">₹200</h1>
+            <p class="flex items-center text-gray-600 mb-2">
+              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+              </span>One-layer cake
+            </p>
+            <p class="flex items-center text-gray-600 mb-2">
+              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+              </span>Choice of two flavors
+            </p>
+            <p class="flex items-center text-gray-600 mb-6">
+              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+              </span>Basic design
+            </p>
+            <button class="flex items-center mt-auto text-white bg-yellow-400 border-0 py-2 px-4 w-full focus:outline-none hover:bg-yellow-600 rounded">
+              Choose Plan
+            </button>
+          </div>
+        </div>
+  
+        <!-- Deluxe Package -->
+        <div class="p-4 xl:w-1/3 md:w-1/2 w-full">
+          <div class="h-full p-6 rounded-lg border-2 border-yellow-400 flex flex-col relative overflow-hidden">
+            <h2 class="text-sm tracking-widest title-font mb-1 font-medium">DELUXE</h2>
+            <h1 class="text-5xl text-gray-900 pb-4 mb-4 border-b border-gray-200 leading-none">₹500</h1>
+            <p class="flex items-center text-gray-600 mb-2">
+              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+              </span>Two-layer cake
+            </p>
+            <p class="flex items-center text-gray-600 mb-2">
+              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+              </span>Choice of four flavors
+            </p>
+            <p class="flex items-center text-gray-600 mb-6">
+              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+              </span>Customized design with name/message
+            </p>
+            <button class="flex items-center mt-auto text-white bg-yellow-400 border-0 py-2 px-4 w-full focus:outline-none hover:bg-yellow-600 rounded">
+              Choose Plan
+            </button>
+          </div>
+        </div>
+  
+        <!-- Premium Package -->
+        <div class="p-4 xl:w-1/3 md:w-1/2 w-full">
+          <div class="h-full p-6 rounded-lg border-2 border-yellow-400 flex flex-col relative overflow-hidden">
+            <h2 class="text-sm tracking-widest title-font mb-1 font-medium">PREMIUM</h2>
+            <h1 class="text-5xl text-gray-900 pb-4 mb-4 border-b border-gray-200 leading-none">₹1000</h1>
+            <p class="flex items-center text-gray-600 mb-2">
+              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+              </span>Three-layer cake
+            </p>
+            <p class="flex items-center text-gray-600 mb-2">
+              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+              </span>Choice of six flavors
+            </p>
+            <p class="flex items-center text-gray-600 mb-6">
+              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+              </span>Fully customized design and decorations
+            </p>
+            <button class="flex items-center mt-auto text-white bg-yellow-400 border-0 py-2 px-4 w-full focus:outline-none hover:bg-yellow-600 rounded">
+              Choose Plan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-{% block style %}
-{% endblock %}
-
-{% block body %}
+  <section class="text-gray-600 body-font">
+    <div class="container px-5 py-24 mx-auto flex flex-wrap">
+      <div class="flex w-full mb-20 flex-wrap">
+        <h1 class="sm:text-3xl text-2xl font-medium title-font text-gray-900 lg:w-1/3 lg:mb-0 mb-4">Our Cake Creations</h1>
+        <p class="lg:pl-6 lg:w-2/3 mx-auto leading-relaxed text-base">Take a look at some of our beautiful and delicious cake designs. Whether you're planning a birthday, wedding, or any special occasion, our cakes will add the perfect sweet touch.</p>
+      </div>
+      <div class="flex flex-wrap md:-m-2 -m-1">
+        <div class="flex flex-wrap w-1/2">
+          <div class="md:p-2 p-1 w-1/2">
+            <img alt="gallery" class="w-full object-cover h-full object-center block" src="https://img.freepik.com/free-photo/birthday-cake_23-2150734952.jpg?size=626&ext=jpg&ga=GA1.1.224891515.1724750204&semt=ais_hybrid">
+          </div>
+          <div class="md:p-2 p-1 w-1/2">
+            <img alt="gallery" class="w-full object-cover h-full object-center block" src="https://img.freepik.com/free-photo/birthday-cake_23-2150734944.jpg?size=626&ext=jpg&ga=GA1.1.224891515.1724750204&semt=ais_hybrid">
+          </div>
+          <div class="md:p-2 p-1 w-full">
+            <img alt="gallery" class="w-full h-full object-cover object-center block" src="https://media.istockphoto.com/id/1367825148/photo/beautiful-unicorn-themed-baby-girls-birthday-cake-on-a-stand-cute-unicorn-face-and-the-pastel.jpg?s=612x612&w=0&k=20&c=9jUp0iHAtwReK1jvE8-tKaCU-7t-0da7TTVARHxn7OU=">
+          </div>
+        </div>
+        <div class="flex flex-wrap w-1/2">
+          <div class="md:p-2 p-1 w-full">
+            <img alt="gallery" class="w-full h-full object-cover object-center block" src="https://media.istockphoto.com/id/1174364953/photo/its-not-a-wedding-without-an-extravagantly-beautiful-cake.jpg?s=612x612&w=0&k=20&c=wwYON6OFsD7naTUangDuVXH-IOjKCQSth_5mrpWgpPI=">
+          </div>
+          <div class="md:p-2 p-1 w-1/2">
+            <img alt="gallery" class="w-full object-cover h-full object-center block" src="https://img.freepik.com/free-photo/delicious-birthday-cake-with-candle_23-2150734884.jpg?size=626&ext=jpg&ga=GA1.1.224891515.1724750204&semt=ais_hybrid">
+          </div>
+          <div class="md:p-2 p-1 w-1/2">
+            <img alt="gallery" class="w-full object-cover h-full object-center block" src="https://img.freepik.com/free-photo/front-view-chocolate-cake-stand_23-2148834043.jpg?size=626&ext=jpg&ga=GA1.1.224891515.1724750204&semt=ais_hybrid">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="text-gray-600 body-font">
+    <div class="container px-5 py-24 mx-auto">
+      <h1 class="text-3xl font-medium title-font text-gray-900 mb-12 text-center">Customer Reviews</h1>
+      <div class="flex flex-wrap -m-4">
+        <div class="p-4 md:w-1/2 w-full">
+          <div class="h-full bg-gray-100 p-8 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="block w-5 h-5 text-gray-400 mb-4" viewBox="0 0 975.036 975.036">
+              <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
+            </svg>
+            <p class="leading-relaxed mb-6">"Amazing service! The quality of the cakes was exceptional, and the entire experience exceeded my expectations. Highly recommended!"</p>
+            <a class="inline-flex items-center">
+              <img alt="testimonial" src="https://dummyimage.com/106x106" class="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center">
+              <span class="flex-grow flex flex-col pl-4">
+                <span class="title-font font-medium text-gray-900">John Doe</span>
+                <span class="text-gray-500 text-sm">Customer</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <div class="p-4 md:w-1/2 w-full">
+          <div class="h-full bg-gray-100 p-8 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="block w-5 h-5 text-gray-400 mb-4" viewBox="0 0 975.036 975.036">
+              <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
+            </svg>
+            <p class="leading-relaxed mb-6">"The cakes were beautifully crafted and tasted absolutely delicious. The team was very professional and made our special occasion even better!"</p>
+            <a class="inline-flex items-center">
+              <img alt="testimonial" src="https://dummyimage.com/107x107" class="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center">
+              <span class="flex-grow flex flex-col pl-4">
+                <span class="title-font font-medium text-gray-900">Jane Smith</span>
+                <span class="text-gray-500 text-sm">Customer</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+    
+  
+  
 {% endblock %}

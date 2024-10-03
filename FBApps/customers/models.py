@@ -16,6 +16,13 @@ class Customers(TimeStamp):
             self.customer_id = generatePrimaryKey(self.POSTFIX)
         super(Customers, self).save(*args, **kwargs)
 
+        CustomerProfile.objects.get_or_create(
+            defaults={
+                'customer': self,
+                'profile_picture' :'default_images\customer_profile.jpg'
+            }
+        )
+
 
 class CustomerProfile(TimeStamp):
     POSTFIX = 'customer_profile'
