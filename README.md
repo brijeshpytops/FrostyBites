@@ -90,3 +90,10 @@ Superuser created successfully.
             - Fonts
             - Images
 
+
+form setup
+
+step-1] <form  action="#" method="post" enctype="multipart/form-data">
+step-2] {% csrf_token %}
+step-3] make sure name attribute in your every Input fields : <input type="email" name="email" />
+step-4] <button type="submit"></button>
