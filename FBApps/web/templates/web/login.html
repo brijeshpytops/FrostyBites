@@ -33,6 +33,27 @@
         >
           Sign in to your account
         </h1>
+         <!-- start message section -->
+{% if messages %}
+{% for message in messages %}
+<div
+  class="p-4 mb-4 rounded-lg text-white flex items-center justify-between {% if message.tags == 'error' %}bg-red-500{% elif message.tags == 'warning' %}bg-yellow-400{% elif message.tags == 'success' %}bg-green-500{% elif message.tags == 'info' %}bg-blue-400{% endif %}"
+  role="alert"
+>
+  <p>{{ message }}</p>
+  <button
+    type="button"
+    class="ml-4 px-2 py-1 rounded bg-gray-800 text-white hover:bg-gray-700"
+    onclick="this.parentElement.remove();"
+    aria-label="Close"
+  >
+    &times;
+  </button>
+</div>
+{% endfor %}
+{% endif %}
+<!-- end message section -->
+
         <form class="space-y-4 md:space-y-6" action="#">
           <div>
             <label

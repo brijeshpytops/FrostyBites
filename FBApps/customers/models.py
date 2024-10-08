@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.hashers import make_password
 
 from FBApps.master.models import TimeStamp
 from FBApps.master.helpers.UNIQUE.createPrimaryKey import generatePrimaryKey
@@ -10,18 +11,25 @@ class Customers(TimeStamp):
     email = models.EmailField(max_length=255, null=False, blank=False, unique=True)
     mobile = models.CharField(max_length=255, null=False, blank=False, unique=True)
     password = models.CharField(max_length=255, blank=True, null=False, default="1234")
+    is_active = models.BooleanField(default=False) 
 
     def save(self, *args, **kwargs):
         if not self.customer_id:
             self.customer_id = generatePrimaryKey(self.POSTFIX)
+            self.password = make_password(self.password)
         super(Customers, self).save(*args, **kwargs)
 
-        CustomerProfile.objects.get_or_create(
+       
+        profile, created = CustomerProfile.objects.get_or_create(
+            customer=self,  # Look up by the customer foreign key
             defaults={
-                'customer': self,
-                'profile_picture' :'default_images\customer_profile.jpg'
+                'profile_picture': 'default_images/customer_profile.jpg'  # Set default profile picture if creating a new profile
             }
         )
+        if created:
+            print(f"Profile created for customer {self.email}")
+        else:
+            print(f"Profile already exists for customer {self.email}")
 
 
 class CustomerProfile(TimeStamp):

@@ -1,0 +1,61 @@
+import jwt
+import datetime
+
+from django.conf import settings
+
+SECRET_KEY = 'XSpHm2vMMNhcCwxOUGaD9sFtbUYq2VmE'
+
+
+def create_jwt_token(customer_id):
+    """
+    Create a JWT token for a given customer ID.
+
+    Args:
+        customer_id (str or int): The ID of the customer for whom the token is being created.
+
+    Returns:
+        str: The encoded JWT token as a string.
+
+    Raises:
+        ValueError: If the customer_id is not provided or is invalid.
+    """
+    payload = {
+        'customer_id': customer_id,
+        'exp': datetime.datetime.now() + datetime.timedelta(minutes=30),
+        'iat': datetime.datetime.now()
+    }
+
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    return token
+
+
+def decode_jwt_token(token):
+    print(token, "--------")
+    print(SECRET_KEY)
+    """
+    Decode a JWT token and retrieve the payload.
+
+    Args:
+        token (str): The JWT token to be decoded.
+
+    Returns:
+        dict: The decoded payload if the token is valid.
+
+    Returns:
+        str: An error message if the token has expired or is invalid.
+
+    Raises:
+        jwt.ExpiredSignatureError: If the token has expired.
+        jwt.InvalidTokenError: If the token is invalid.
+    """
+    try:
+        # Decode the token using the same secret key
+        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        print(payload)
+        return payload
+    except jwt.ExpiredSignatureError:
+        print("Token has expired.")
+        return None
+    except jwt.InvalidTokenError:
+        print("Invalid token.")
+        return None
