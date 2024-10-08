@@ -69,7 +69,7 @@ def activate_account(request, customer_id, token):
         customer.save()
 
         messages.success(request, "Your account has been activated successfully.")
-        return redirect('login')  # Redirect to the login page
+        return redirect('login_view')  # Redirect to the login page
 
     except jwt.ExpiredSignatureError:
         messages.error(request, "Confirmation link has expired.")
