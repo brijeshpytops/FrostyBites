@@ -7,6 +7,7 @@ urlpatterns = [
     path('activate/<str:customer_id>/<str:token>/', activate_account, name='activate_account'),
     path('change-password/', forgot_password_view, name='forgot_password_view'),
     path('otp-verify/', otp_verify_view, name='otp_verify_view'),
+    path('logout/', logout, name='logout'),
     path('index/', index_view, name='index_view'),
     path('catagories/', catagories_view, name='catagories_view'),
     path('latest-collection/', latest_collection_view, name='latest_collection_view'),

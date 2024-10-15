@@ -1,13 +1,33 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.hashers import check_password
+from django.core.mail import send_mail
+from django.conf import settings
+
+from functools import wraps
 
 from FBApps.customers.models import Customers
 from FBApps.master.helpers.UNIQUE.checkPassword import is_valid_password
 from FBApps.master.helpers.UNIQUE.JWTToken import create_jwt_token, decode_jwt_token
+from FBApps.master.helpers.UNIQUE.createOtp import generate_otp
 from .emailHelpers import send_activation_email
 
 import time
 import jwt
+
+
+
+def login_required(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        # Check if 'customer_id' is in session
+        if 'customer_id' not in request.session:
+            # Redirect to the login page if not authenticated
+            messages.warning(request, "You need to login first.")
+            return redirect('login_view')
+        # Call the original view function if authenticated
+        return view_func(request, *args, **kwargs)
+    return wrapper
 
 # Create your views here.
 def register_view(request):
@@ -85,13 +105,64 @@ def some_error_page(request):
     return render(request, 'web/some_error_page.html')
 
 def login_view(request):
+    if request.method == 'POST':
+        email_ = request.POST.get('email')
+        password_ = request.POST.get('password')
+
+        if Customers.objects.filter(email=email_).exists():
+            customer = Customers.objects.get(email=email_)
+            if customer.is_active:
+                is_valid = check_password(password_, customer.password)
+                if is_valid:
+                    request.session['customer_id'] = customer.customer_id
+                    return redirect('index_view')
+                else:
+                    messages.info(request, "Invalid password.")
+                    return redirect('login_view')
+            else:
+                messages.info(request, "Account is not activated. Please activate your account first.")
+                return redirect('login_view')
+        else:
+            messages.warning(request, "Email does not exist.")
+            return redirect('login_view')
     return render(request, 'web/login.html')
 
 def forgot_password_view(request):
+    if request.method == 'POST':
+        email_ = request.POST.get('email')
+        if Customers.objects.filter(email=email_).exists():
+            customer = Customers.objects.get(email=email_)
+            otp_ =  generate_otp()
+            customer.otp = otp_
+            customer.save()
+
+            message = f'Your one-time password is: {otp_}'
+
+            send_mail(
+            "Forgot your password | Frostybites",
+            message,
+            settings.EMAIL_HOST_USER, 
+            [email_]
+            )
+            messages.success(request, "We have sent a one-time password to your email. Please check your inbox.")
+            return render(request, 'web/otp-verify.html', {'email': email_})
+        else:
+            messages.warning(request, "Email does not exist.")
+            return redirect('forgot_password_view')
+
+
+
     return render(request, 'web/forgot-password.html')
 
 def otp_verify_view(request):
     return render(request, 'web/otp-verify.html')
+
+@login_required
+def logout(request):
+    request.session.clear()
+    messages.success(request, "You have been logged out successfully.")
+    return redirect('login_view')
+
 
 def index_view(request):
     return render(request, 'web/index.html')
@@ -107,6 +178,6 @@ def on_trand_view(request):
 
 def custom_cake_view(request):
     return render(request, 'web/custom_cake.html')
-
+@login_required
 def profile_view(request):
     return render(request, 'web/profile.html')

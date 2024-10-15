@@ -12,6 +12,7 @@ class Customers(TimeStamp):
     mobile = models.CharField(max_length=255, null=False, blank=False, unique=True)
     password = models.CharField(max_length=255, blank=True, null=False, default="1234")
     is_active = models.BooleanField(default=False) 
+    otp = models.CharField(max_length=255, default="546345")
 
     def save(self, *args, **kwargs):
         if not self.customer_id:

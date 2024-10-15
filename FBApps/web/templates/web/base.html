@@ -42,6 +42,9 @@
         <nav
           class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center"
         >
+          <a href="{% url 'index_view' %}" class="mr-5 hover:text-gray-900"
+            >Home</a
+          >
           <a href="{% url 'catagories_view' %}" class="mr-5 hover:text-gray-900"
             >Catagories</a
           >
@@ -59,18 +62,8 @@
             >Customize Cake</a
           >
         </nav>
-        <a
-          href=""
-          class="inline-flex items-center bg-gray-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0"
-        >
-          Register
-        </a>
-        <a
-          href=""
-          class="inline-flex items-center bg-gray-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mx-2 mt-4 md:mt-0"
-        >
-          Login
-        </a>
+
+        {% if request.session.customer_id %}
         <a
           href="{% url 'profile_view' %}"
           class="inline-flex items-center bg-green-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mx-2 mt-4 md:mt-0"
@@ -78,11 +71,25 @@
           Profile
         </a>
         <a
-          href=""
+          href="{% url 'logout' %}"
           class="inline-flex items-center bg-red-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mx-2 mt-4 md:mt-0"
         >
           Logout
         </a>
+        {% else %}
+        <a
+          href="{% url 'register_view' %}"
+          class="inline-flex items-center bg-gray-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0"
+        >
+          Register
+        </a>
+        <a
+          href="{% url 'login_view' %}"
+          class="inline-flex items-center bg-gray-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mx-2 mt-4 md:mt-0"
+        >
+          Login
+        </a>
+        {% endif %}
       </div>
     </header>
 
@@ -115,7 +122,8 @@
             <span class="ml-3 text-xl">Frostybites</span>
           </a>
           <p class="mt-2 text-sm text-gray-500">
-            Bringing joy to every occasion with our handcrafted cakes. Satisfy your sweet cravings and share the love one slice at a time!
+            Bringing joy to every occasion with our handcrafted cakes. Satisfy
+            your sweet cravings and share the love one slice at a time!
           </p>
         </div>
         <div
@@ -132,13 +140,17 @@
                 <a class="text-gray-600 hover:text-gray-800">Catagories</a>
               </li>
               <li>
-                <a class="text-gray-600 hover:text-gray-800">Latest Collection</a>
+                <a class="text-gray-600 hover:text-gray-800"
+                  >Latest Collection</a
+                >
               </li>
               <li>
                 <a class="text-gray-600 hover:text-gray-800">On trand</a>
               </li>
               <li>
-                <a class="text-gray-600 hover:text-gray-800">Customizable cake</a>
+                <a class="text-gray-600 hover:text-gray-800"
+                  >Customizable cake</a
+                >
               </li>
             </nav>
           </div>
@@ -156,7 +168,9 @@
                 <a class="text-gray-600 hover:text-gray-800">Engagement Cake</a>
               </li>
               <li>
-                <a class="text-gray-600 hover:text-gray-800">Anniverasary Cake</a>
+                <a class="text-gray-600 hover:text-gray-800"
+                  >Anniverasary Cake</a
+                >
               </li>
               <li>
                 <a class="text-gray-600 hover:text-gray-800">Marriage Cake</a>
@@ -164,25 +178,36 @@
             </nav>
           </div>
           <div class="lg:w-1/3 md:w-1/2 w-full px-4">
-            <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-                CONTACTS
+            <h2
+              class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3"
+            >
+              CONTACTS
             </h2>
             <nav class="list-none mb-10">
-                <li>
-                    <span class="text-gray-600 font-bold">Mobile: </span>
-                    <a class="text-gray-600 hover:text-gray-800" href="tel:+1234567890">+1 234-567-890</a>
-                </li>
-                <li>
-                    <span class="text-gray-600 font-bold">Email: </span>
-                    <a class="text-gray-600 hover:text-gray-800" href="mailto:info@cakeshop.com">info@cakeshop.com</a>
-                </li>
-                <li>
-                    <span class="text-gray-600 font-bold">Address: </span>
-                    <p class="text-gray-600 hover:text-gray-800">123 Sweet Street, Cake City, 12345</p>
-                </li>
+              <li>
+                <span class="text-gray-600 font-bold">Mobile: </span>
+                <a
+                  class="text-gray-600 hover:text-gray-800"
+                  href="tel:+1234567890"
+                  >+1 234-567-890</a
+                >
+              </li>
+              <li>
+                <span class="text-gray-600 font-bold">Email: </span>
+                <a
+                  class="text-gray-600 hover:text-gray-800"
+                  href="mailto:info@cakeshop.com"
+                  >info@cakeshop.com</a
+                >
+              </li>
+              <li>
+                <span class="text-gray-600 font-bold">Address: </span>
+                <p class="text-gray-600 hover:text-gray-800">
+                  123 Sweet Street, Cake City, 12345
+                </p>
+              </li>
             </nav>
-        </div>
-        
+          </div>
         </div>
       </div>
       <div class="bg-gray-100">
