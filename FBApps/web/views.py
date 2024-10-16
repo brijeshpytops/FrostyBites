@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.core.mail import send_mail
 from django.conf import settings
 
 from functools import wraps
 
-from FBApps.customers.models import Customers
+from FBApps.customers.models import Customers, CustomerProfile
 from FBApps.master.helpers.UNIQUE.checkPassword import is_valid_password
 from FBApps.master.helpers.UNIQUE.JWTToken import create_jwt_token, decode_jwt_token
 from FBApps.master.helpers.UNIQUE.createOtp import generate_otp
@@ -144,8 +144,9 @@ def forgot_password_view(request):
             settings.EMAIL_HOST_USER, 
             [email_]
             )
+            request.session['FB-email'] = email_
             messages.success(request, "We have sent a one-time password to your email. Please check your inbox.")
-            return render(request, 'web/otp-verify.html', {'email': email_})
+            return redirect('otp_verify_view')
         else:
             messages.warning(request, "Email does not exist.")
             return redirect('forgot_password_view')
@@ -155,6 +156,35 @@ def forgot_password_view(request):
     return render(request, 'web/forgot-password.html')
 
 def otp_verify_view(request):
+    if request.method == 'POST':
+        email_ = request.session['FB-email']
+        otp_ = request.POST.get('otp')
+        new_password_ = request.POST['new_password']
+        confirm_password_ = request.POST['confirm_password']
+
+        if Customers.objects.filter(email=email_).exists():
+            customer = Customers.objects.get(email=email_)
+            if customer.otp == otp_:
+                if new_password_!= confirm_password_:
+                    messages.info(request, "Password and Confirm Password should match")
+                    return redirect('otp_verify_view')
+                else:
+                    is_valid, validation_message = is_valid_password(new_password_)
+                    if not is_valid:
+                        messages.info(request, validation_message)  # Show validation message if password is invalid
+                        return redirect('otp_verify_view')
+                    else:
+                        customer.password = make_password(new_password_)
+                        customer.save()
+                        del request.session['FB-email']
+                        messages.success(request, "Password has been changed successfully.")
+                        return redirect('login_view')
+            else:
+                messages.info(request, "Invalid OTP.")
+                return redirect('otp_verify_view')
+        else:
+            messages.warning(request, "Email does not exits.")
+            return redirect('otp_verify_view')
     return render(request, 'web/otp-verify.html')
 
 @login_required
@@ -180,4 +210,10 @@ def custom_cake_view(request):
     return render(request, 'web/custom_cake.html')
 @login_required
 def profile_view(request):
-    return render(request, 'web/profile.html')
+    getCustomer = Customers.objects.get(customer_id=request.session['customer_id'])
+    getCustomerProfile = CustomerProfile.objects.get(customer_id=request.session['customer_id'])
+
+    return render(request, 'web/profile.html', {
+        'customer': getCustomer,
+        'customerProfile': getCustomerProfile
+    })
