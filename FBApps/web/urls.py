@@ -14,5 +14,7 @@ urlpatterns = [
     path('on-trand/', on_trand_view, name='on_trand_view'),
     path('custom-cake/', custom_cake_view, name='custom_cake_view'),
     path('profile/', profile_view, name='profile_view'),
+    path('edit-profile/', edit_profile, name='edit_profile'),
+    path('edit-profile-picture/', edit_profile_picture, name='edit_profile_picture'),
     path('some-error/', some_error_page, name='some_error_page'),
 ]

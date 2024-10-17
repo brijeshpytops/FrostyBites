@@ -217,3 +217,43 @@ def profile_view(request):
         'customer': getCustomer,
         'customerProfile': getCustomerProfile
     })
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        first_name_ = request.POST['first_name']
+        last_name_ = request.POST['last_name']
+        mobile_ = request.POST['mobile']
+        gender_ = request.POST['gender']
+        date_ = request.POST['date_of_birth']
+
+        getCustomer = Customers.objects.get(customer_id=request.session['customer_id'])
+        getCustomer.mobile = mobile_
+        getCustomer.save()
+
+        getCustomerProfile = CustomerProfile.objects.get(customer_id=request.session['customer_id'])
+        getCustomerProfile.first_name = first_name_
+        getCustomerProfile.last_name = last_name_
+        getCustomerProfile.gender = gender_
+        getCustomerProfile.date_of_birth = date_
+        getCustomerProfile.save()
+
+        messages.success(request, "Profile data updated successfully.")
+        return redirect('profile_view')
+    
+@login_required
+def edit_profile_picture(request):
+    if request.method == 'POST' and request.FILES.get('profile'):
+        profile_picture_ = request.FILES['profile']
+        print(profile_picture_)
+        try:
+            getCustomerProfile = CustomerProfile.objects.get(customer_id=request.session['customer_id'])
+            getCustomerProfile.profile_picture = profile_picture_
+            getCustomerProfile.save()
+            messages.success(request, "Profile picture updated successfully.")
+        except CustomerProfile.DoesNotExist:
+            messages.error(request, "Profile not found.")
+    else:
+        messages.error(request, "No file uploaded.")
+
+    return redirect('profile_view')
