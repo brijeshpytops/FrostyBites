@@ -7,6 +7,7 @@ from django.conf import settings
 from functools import wraps
 
 from FBApps.customers.models import Customers, CustomerProfile
+from FBApps.web.models import Cakes, Categories
 from FBApps.master.helpers.UNIQUE.checkPassword import is_valid_password
 from FBApps.master.helpers.UNIQUE.JWTToken import create_jwt_token, decode_jwt_token
 from FBApps.master.helpers.UNIQUE.createOtp import generate_otp
@@ -195,10 +196,15 @@ def logout(request):
 
 
 def index_view(request):
-    return render(request, 'web/index.html')
+    categories = Categories.objects.all()
+    context = {
+        'categories': categories
+    }
+    return render(request, 'web/index.html', context)
 
 def catagories_view(request):
-    return render(request, 'web/catagories.html')
+    cakes = Cakes.objects.all()
+    return render(request, 'web/catagories.html', {'cakes':cakes})
 
 def latest_collection_view(request):
     return render(request, 'web/latest_collection.html')

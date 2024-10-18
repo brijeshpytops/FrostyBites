@@ -23,115 +23,32 @@
     </div>
   </section>
 
-  <section class="text-gray-600 body-font overflow-hidden">
+  <section class="text-gray-600 body-font">
     <div class="container px-5 py-24 mx-auto">
-      <div class="flex flex-col text-center w-full mb-20">
-        <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">Cake Shop Packages</h1>
-        <p class="lg:w-2/3 mx-auto leading-relaxed text-base text-gray-500">
-          Choose the perfect cake package for your special occasion. Whether it's a small gathering or a grand celebration, we have something sweet for everyone.
-        </p>
-        <div class="flex mx-auto border-2 border-yellow-400 rounded overflow-hidden mt-6">
-          <button class="py-1 px-4 bg-yellow-400 text-white focus:outline-none">Monthly</button>
-          <button class="py-1 px-4 focus:outline-none">Annually</button>
-        </div>
+      <div class="text-center mb-20">
+        <h1 class="sm:text-3xl text-2xl font-medium text-center title-font text-gray-900 mb-4">Cakes categories</h1>
+        <p class="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine, ramps microdosing banh mi pug.</p>
       </div>
-      <div class="flex flex-wrap -m-4">
-        <!-- Starter Package -->
-        <div class="p-4 xl:w-1/3 md:w-1/2 w-full">
-          <div class="h-full p-6 rounded-lg border-2 border-yellow-400 flex flex-col relative overflow-hidden">
-            <h2 class="text-sm tracking-widest title-font mb-1 font-medium">STARTER</h2>
-            <h1 class="text-5xl text-gray-900 pb-4 mb-4 border-b border-gray-200 leading-none">₹200</h1>
-            <p class="flex items-center text-gray-600 mb-2">
-              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
-                  <path d="M20 6L9 17l-5-5"></path>
-                </svg>
-              </span>One-layer cake
-            </p>
-            <p class="flex items-center text-gray-600 mb-2">
-              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
-                  <path d="M20 6L9 17l-5-5"></path>
-                </svg>
-              </span>Choice of two flavors
-            </p>
-            <p class="flex items-center text-gray-600 mb-6">
-              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
-                  <path d="M20 6L9 17l-5-5"></path>
-                </svg>
-              </span>Basic design
-            </p>
-            <button class="flex items-center mt-auto text-white bg-yellow-400 border-0 py-2 px-4 w-full focus:outline-none hover:bg-yellow-600 rounded">
-              Choose Plan
-            </button>
+      <div class="flex flex-wrap lg:w-4/5 sm:mx-auto sm:mb-2 -mx-2">
+        {% if categories.length != 0 %}
+        {% for category in categories %}
+        <div class="p-2 sm:w-1/2 w-full">
+          <div class="bg-gray-100 rounded flex p-4 h-full items-center">
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" class="text-yellow-500 w-6 h-6 flex-shrink-0 mr-4" viewBox="0 0 24 24">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+              <path d="M22 4L12 14.01l-3-3"></path>
+            </svg>
+            <span class="title-font font-medium">{{category.name}}</span>
           </div>
         </div>
-  
-        <!-- Deluxe Package -->
-        <div class="p-4 xl:w-1/3 md:w-1/2 w-full">
-          <div class="h-full p-6 rounded-lg border-2 border-yellow-400 flex flex-col relative overflow-hidden">
-            <h2 class="text-sm tracking-widest title-font mb-1 font-medium">DELUXE</h2>
-            <h1 class="text-5xl text-gray-900 pb-4 mb-4 border-b border-gray-200 leading-none">₹500</h1>
-            <p class="flex items-center text-gray-600 mb-2">
-              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
-                  <path d="M20 6L9 17l-5-5"></path>
-                </svg>
-              </span>Two-layer cake
-            </p>
-            <p class="flex items-center text-gray-600 mb-2">
-              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
-                  <path d="M20 6L9 17l-5-5"></path>
-                </svg>
-              </span>Choice of four flavors
-            </p>
-            <p class="flex items-center text-gray-600 mb-6">
-              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
-                  <path d="M20 6L9 17l-5-5"></path>
-                </svg>
-              </span>Customized design with name/message
-            </p>
-            <button class="flex items-center mt-auto text-white bg-yellow-400 border-0 py-2 px-4 w-full focus:outline-none hover:bg-yellow-600 rounded">
-              Choose Plan
-            </button>
-          </div>
-        </div>
-  
-        <!-- Premium Package -->
-        <div class="p-4 xl:w-1/3 md:w-1/2 w-full">
-          <div class="h-full p-6 rounded-lg border-2 border-yellow-400 flex flex-col relative overflow-hidden">
-            <h2 class="text-sm tracking-widest title-font mb-1 font-medium">PREMIUM</h2>
-            <h1 class="text-5xl text-gray-900 pb-4 mb-4 border-b border-gray-200 leading-none">₹1000</h1>
-            <p class="flex items-center text-gray-600 mb-2">
-              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
-                  <path d="M20 6L9 17l-5-5"></path>
-                </svg>
-              </span>Three-layer cake
-            </p>
-            <p class="flex items-center text-gray-600 mb-2">
-              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
-                  <path d="M20 6L9 17l-5-5"></path>
-                </svg>
-              </span>Choice of six flavors
-            </p>
-            <p class="flex items-center text-gray-600 mb-6">
-              <span class="w-4 h-4 mr-2 inline-flex items-center justify-center bg-yellow-400 text-white rounded-full flex-shrink-0">
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" class="w-3 h-3" viewBox="0 0 24 24">
-                  <path d="M20 6L9 17l-5-5"></path>
-                </svg>
-              </span>Fully customized design and decorations
-            </p>
-            <button class="flex items-center mt-auto text-white bg-yellow-400 border-0 py-2 px-4 w-full focus:outline-none hover:bg-yellow-600 rounded">
-              Choose Plan
-            </button>
-          </div>
-        </div>
+        {% endfor %}
+        {% else %}
+
+        <p>No categories found</p>
+
+        {% endif %}
       </div>
+      <a href="{% url 'catagories_view' %}" class="flex mx-auto w-36 mt-16 text-white bg-yellow-500 border-0 py-2 px-8 focus:outline-none hover:bg-yellow-600 rounded text-lg">Catagories</a>
     </div>
   </section>
 
