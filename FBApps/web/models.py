@@ -1,4 +1,5 @@
 from django.db import models
+from FBApps.customers.models import Customers
 from FBApps.master.models import TimeStamp
 from FBApps.master.helpers.UNIQUE.createPrimaryKey import generatePrimaryKey
 # Create your models here.
@@ -29,3 +30,22 @@ class Cakes(TimeStamp):
         if not self.pk:
             self.cake_id = generatePrimaryKey(self.POSTFIX)
         super(Cakes, self).save(*args, **kwargs)
+
+
+class CustomizeCake(TimeStamp):
+    REQUEST_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Accepted', 'Accepted'),
+        ('Rejected', 'Rejected'),
+    )
+    POSTFIX = 'customize_cake'
+    customize_cake_id = models.CharField(primary_key=True, blank=True, null=False, max_length=255)
+    customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=f'{POSTFIX}/')
+    content = models.TextField()
+    request_status = models.CharField(max_length=255, blank=True, null=True, choices=REQUEST_CHOICES, default="Pending")
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.customize_cake_id = generatePrimaryKey(self.POSTFIX)
+        super(CustomizeCake, self).save(*args, **kwargs)

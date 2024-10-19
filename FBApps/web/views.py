@@ -7,7 +7,7 @@ from django.conf import settings
 from functools import wraps
 
 from FBApps.customers.models import Customers, CustomerProfile
-from FBApps.web.models import Cakes, Categories
+from FBApps.web.models import Cakes, Categories, CustomizeCake
 from FBApps.master.helpers.UNIQUE.checkPassword import is_valid_password
 from FBApps.master.helpers.UNIQUE.JWTToken import create_jwt_token, decode_jwt_token
 from FBApps.master.helpers.UNIQUE.createOtp import generate_otp
@@ -213,7 +213,26 @@ def on_trand_view(request):
     return render(request, 'web/on_trand.html')
 
 def custom_cake_view(request):
-    return render(request, 'web/custom_cake.html')
+    if request.method == 'POST':
+        image_ = request.FILES['image']
+        content_ = request.POST['content']
+
+        new_cake_request = CustomizeCake.objects.create(
+            customer_id=request.session['customer_id'],
+            image=image_,
+            content=content_
+        )
+
+        new_cake_request.save()
+        messages.success(request, "Your custom cake request has been submitted successfully. We will get back to you soon.")
+        return redirect('custom_cake_view')
+
+
+    cake_requests = CustomizeCake.objects.filter(customer_id=request.session['customer_id'])
+    context = {
+        'cake_requests':cake_requests
+    }
+    return render(request, 'web/custom_cake.html', context)
 @login_required
 def profile_view(request):
     getCustomer = Customers.objects.get(customer_id=request.session['customer_id'])

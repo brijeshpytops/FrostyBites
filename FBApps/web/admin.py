@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Categories, Cakes
+from .models import Categories, Cakes, CustomizeCake
 # Register your models here.
 
 class CategoriesAdmin(admin.ModelAdmin):
@@ -19,3 +19,19 @@ class CakesAdmin(admin.ModelAdmin):
     
     display_image.short_description = 'Image'
 admin.site.register(Cakes, CakesAdmin)
+
+class CustomizeCakeAdmin(admin.ModelAdmin):
+    list_display = ['customer', 'display_image', 'content','request_status']
+    list_filter = ['request_status']
+
+    list_per_page = 10
+
+    def display_image(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="width: 100px; height: auto;"/>', obj.image.url)
+        return "No Image"
+    
+    display_image.short_description = 'Image'
+
+
+admin.site.register(CustomizeCake, CustomizeCakeAdmin)
