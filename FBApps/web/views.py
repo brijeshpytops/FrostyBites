@@ -196,7 +196,7 @@ def logout(request):
 
 
 def index_view(request):
-    categories = Categories.objects.all()
+    categories = Categories.objects.all().order_by('name')
     context = {
         'categories': categories
     }
@@ -229,10 +229,25 @@ def custom_cake_view(request):
 
 
     cake_requests = CustomizeCake.objects.filter(customer_id=request.session['customer_id'])
+    
     context = {
-        'cake_requests':cake_requests
+        'cake_requests':cake_requests,
+        'request_length': len(cake_requests)
     }
+    print(context)
     return render(request, 'web/custom_cake.html', context)
+
+
+def removeCustomCake(request, cake_id):
+    get_cake = CustomizeCake.objects.get(customize_cake_id=cake_id)
+    get_cake.delete()
+    messages.success(request, "Your custom cake request has been removed successfully.")
+    return redirect('custom_cake_view')
+
+@login_required
+def cart_view(request):
+    return render(request, 'web/cart.html')
+
 @login_required
 def profile_view(request):
     getCustomer = Customers.objects.get(customer_id=request.session['customer_id'])

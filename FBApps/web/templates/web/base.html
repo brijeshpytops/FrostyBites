@@ -61,6 +61,11 @@
             class="mr-5 hover:text-gray-900"
             >Customize Cake</a
           >
+          <a
+            href="{% url 'cart_view' %}"
+            class="mr-5 text-red-400 border-2 p-2 rounded-b-xl font-bold"
+            >Cart</a
+          >
         </nav>
 
         {% if request.session.customer_id %}

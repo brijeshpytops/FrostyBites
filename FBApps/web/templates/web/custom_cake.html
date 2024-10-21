@@ -12,7 +12,7 @@ Customize cake
     <div class="container px-5 py-12 mx-auto flex sm:flex-nowrap flex-wrap">
       <!-- Left Side: Cake Details Table -->
       <div class="lg:w-2/3 md:w-2/2 rounded-lg overflow-hidden sm:mr-10 p-10 flex flex-col items-start relative bg-white">
-        <h2 class="text-gray-900 text-lg mb-4 font-medium title-font">Cake Customization Requests</h2>
+        <h2 class="text-gray-900 text-lg mb-4 font-medium title-font">Cake Customization Requests </h2>
         <div class="w-full flex flex-col bg-white rounded-lg shadow-lg p-6">
           <table class="w-full text-left table-auto">
             <thead>
@@ -20,9 +20,12 @@ Customize cake
                 <th class="px-4 py-2 text-gray-600">Customize Cake Image</th>
                 <th class="px-4 py-2 text-gray-600">Content</th>
                 <th class="px-4 py-2 text-gray-600">Request Status</th>
+                <th class="px-4 py-2 text-gray-600">Action</th>
               </tr>
             </thead>
             <tbody>
+              
+              {% if request_length != 0 %}
               {% for cake in cake_requests %}
               <tr>
                 <td class="border px-4 py-2">
@@ -40,8 +43,20 @@ Customize cake
                     {{ cake.request_status }}
                   </span>
                 </td>
+                <td class="border px-4 py-2">
+                  <a href="{% url 'removeCustomCake' cake_id=cake.customize_cake_id %}" class="inline-flex text-white items-center bg-red-500 border-0 py-1 px-3 focus:outline-none hover:bg-red-300 rounded text-base mt-4 md:mt-0">
+                    Delete
+                  </a>
+                </td>
               </tr>
               {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="4">
+                  <p class="text-center my-3">No requests found.</p>
+                </td>
+              </tr>
+              {% endif %}
             </tbody>
           </table>
         </div>
