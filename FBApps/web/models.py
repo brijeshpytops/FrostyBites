@@ -49,3 +49,52 @@ class CustomizeCake(TimeStamp):
         if not self.pk:
             self.customize_cake_id = generatePrimaryKey(self.POSTFIX)
         super(CustomizeCake, self).save(*args, **kwargs)
+
+
+class Cart(TimeStamp):
+    POSTFIX = 'cart'
+    cart_id = models.CharField(primary_key=True, blank=True, null=False, max_length=255)
+    customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
+    cake = models.ForeignKey(Cakes, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.cart_id = generatePrimaryKey(self.POSTFIX)
+        super(Cart, self).save(*args, **kwargs)
+
+    
+from django.db import models
+from django.utils import timezone
+
+class Order(models.Model):
+    ORDER_STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('PROCESSING', 'Processing'),
+        ('COMPLETED', 'Completed'),
+        ('CANCELLED', 'Cancelled'),
+    ]
+
+    order_id = models.CharField(primary_key=True, max_length=255, blank=True, null=False)
+    customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
+    order_date = models.DateTimeField(default=timezone.now)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='PENDING')
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            # Generate the order_id using a custom method or library
+            self.order_id = generatePrimaryKey('order')
+        super(Order, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f'Order {self.order_id} - {self.customer.name}'
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
+    cake = models.ForeignKey(Cakes, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f'{self.cake.name} - {self.quantity}'

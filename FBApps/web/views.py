@@ -7,7 +7,7 @@ from django.conf import settings
 from functools import wraps
 
 from FBApps.customers.models import Customers, CustomerProfile
-from FBApps.web.models import Cakes, Categories, CustomizeCake
+from FBApps.web.models import Cakes, Categories, CustomizeCake, Cart
 from FBApps.master.helpers.UNIQUE.checkPassword import is_valid_password
 from FBApps.master.helpers.UNIQUE.JWTToken import create_jwt_token, decode_jwt_token
 from FBApps.master.helpers.UNIQUE.createOtp import generate_otp
@@ -195,6 +195,7 @@ def logout(request):
     return redirect('login_view')
 
 
+
 def index_view(request):
     categories = Categories.objects.all().order_by('name')
     context = {
@@ -246,7 +247,26 @@ def removeCustomCake(request, cake_id):
 
 @login_required
 def cart_view(request):
-    return render(request, 'web/cart.html')
+    cart_items = Cart.objects.filter(customer_id=request.session['customer_id'])
+    context = {
+        'cart_items': cart_items,
+        'total_items': len(cart_items),
+    }
+    return render(request, 'web/cart.html', context)
+
+@login_required
+def add_to_cart(request, cake_id):
+    get_cake = Cakes.objects.get(cake_id=cake_id)
+    customer_id = request.session['customer_id']
+
+    add_item = Cart.objects.create(
+        customer_id=customer_id,
+        cake_id = cake_id
+    )
+    add_item.save()
+    messages.success(request, "Cake added to cart successfully.")
+    return redirect('cart_view')
+
 
 @login_required
 def profile_view(request):

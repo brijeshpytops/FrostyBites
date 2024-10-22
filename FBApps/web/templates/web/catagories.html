@@ -1,35 +1,48 @@
-{% extends 'web/base.html'%}
-
-{% block title %}
-Categories
-{% endblock %}
-
-{% block style %}
-{% endblock %}
-
-{% block body %}
+{% extends 'web/base.html'%} {% block title %} Categories {% endblock %} {% block style %} {% endblock %} {% block body %}
 <section class="text-gray-600 body-font">
-    <div class="container px-5 py-24 mx-auto">
-        <div class="flex flex-wrap -m-4">
-            {% if cakes.length != 0 %}
-            {% for cake in cakes %}
-            <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-                <a class="block relative h-48 rounded overflow-hidden">
-                    <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="{{cake.image.url}}">
-                </a>
-                <div class="mt-4">
-                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{cake.category.name|upper}}</h3>
-                    <h2 class="text-gray-900 title-font text-lg font-medium">{{cake.name|title}}</h2>
-                    <p class="mt-1">₹{{cake.price}}</p>
-                    <button class="mt-2 text-white bg-yellow-500 border-0 py-2 px-4 focus:outline-none hover:bg-yellow-600 rounded">Buy Now</button>
-                </div>
+  <div class="container px-5 py-24 mx-auto">
+    <div class="flex flex-wrap -m-4">
+      {% if cakes.length != 0 %} {% for cake in cakes %}
+      <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+        <a class="block relative h-48 rounded overflow-hidden">
+          <img
+            alt="ecommerce"
+            class="object-cover object-center w-full h-full block"
+            src="{{cake.image.url}}"
+          />
+        </a>
+        <div class="mt-4">
+          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">
+            {{cake.category.name|upper}}
+          </h3>
+          <h2 class="text-gray-900 title-font text-lg font-medium">
+            {{cake.name|title}}
+          </h2>
+          <p class="mt-1">₹{{cake.price}}</p>
+
+          <div class="flex justify-start mt-3">
+            <div class="flex space-x-4">
+              <a
+                href="{% url 'add_to_cart' cake_id=cake.cake_id %}"
+                class="text-white bg-yellow-500 border-0 py-2 px-4 focus:outline-none hover:bg-yellow-600 rounded"
+              >
+                Add to Cart
+              </a>
+              <a
+                href=""
+                class="text-dark bg-gray-300 border-0 py-2 px-4 focus:outline-none hover:bg-gray-400 rounded"
+              >
+                Know more
+              </a>
             </div>
-            {% endfor %}
-            {% else %}
-            <p class="text-center">No cakes found in this category.</p>
-            {% endif %}
+          </div>
         </div>
+      </div>
+      {% endfor %} {% else %}
+      <p class="text-center">No cakes found in this category.</p>
+      {% endif %}
     </div>
+  </div>
 </section>
 
 {% endblock %}

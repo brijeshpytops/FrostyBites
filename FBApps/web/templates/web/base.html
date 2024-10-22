@@ -9,8 +9,8 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css"
       rel="stylesheet"
     />
-    <!-- Heroicons -->
-    <script src="https://unpkg.com/heroicons@2.0.18/dist/heroicons.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
     {% block style %} {% endblock %}
   </head>
@@ -63,8 +63,9 @@
           >
           <a
             href="{% url 'cart_view' %}"
-            class="mr-5 text-red-400 border-2 p-2 rounded-b-xl font-bold"
-            >Cart</a
+            class="mr-5 text-red-400 border-2 border-red-200 p-2 rounded-b-xl font-bold"
+            ><i class="fa-solid fa-cart-shopping"></i>
+            </a
           >
         </nav>
 
@@ -77,7 +78,7 @@
         </a>
         <a
           href="{% url 'logout' %}"
-          class="inline-flex items-center bg-red-200 border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mx-2 mt-4 md:mt-0"
+          class="inline-flex items-center bg-red-200 border-0  py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mx-2 mt-4 md:mt-0"
         >
           Logout
         </a>

@@ -8,4 +8,107 @@ Carts
 {% endblock %}
 
 {% block body %}
+<div class="container mx-auto p-4">
+    <h2 class="text-2xl font-bold mb-4">Cart Items</h2>
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <table class="min-w-full bg-white">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="w-1/12 px-4 py-2 text-left">
+                        <input type="checkbox" id="selectAll" class="form-checkbox">
+                    </th>
+                    <th class="w-3/12 px-4 py-2 text-left">Cake</th>
+                    <th class="w-2/12 px-4 py-2 text-left">Quantity</th>
+                    <th class="w-2/12 px-4 py-2 text-left">Price</th>
+                    <th class="w-2/12 px-4 py-2 text-left">Total</th>
+                    <th class="w-2/12 px-4 py-2 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if total_items %}
+                {% for cart_item in cart_items %}
+                <tr class="border-t">
+                    <td class="px-4 py-2">
+                        <input type="checkbox" class="form-checkbox select-item">
+                    </td>
+                    <td class="px-4 py-2">
+                        <img src="{{ cart_item.cake.image.url }}" alt="" class="w-24 h-24 object-cover">
+                        {{ cart_item.cake.name }}
+                    </td>
+                    <td class="px-4 py-2">
+                        <input type="number" min="1" value="{{ cart_item.quantity }}" onchange="updateTotal(this)" class="w-16 p-2 border rounded-md text-center" data-price="{{ cart_item.cake.price }}">
+                    </td>
+                    <td class="px-4 py-2">₹{{ cart_item.cake.price }}</td>
+                    <td class="px-4 py-2 total-price">₹{{ cart_item.cake.price }}</td>
+                    <td class="px-4 py-2 text-right">
+                        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Remove</button>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center py-3">No items in cart.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% if total_items %}
+    <div class="flex justify-between items-center mt-4">
+        <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Place Order
+        </button>
+        <div class="text-right">
+            <span class="text-xl font-bold">Total: ₹<span id="grandTotal">0.00</span></span>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function updateTotal(inputElement) {
+        const row = inputElement.closest('tr'); // Get the closest table row
+        const price = parseFloat(inputElement.getAttribute('data-price')); // Get the price from data attribute
+        const quantity = parseInt(inputElement.value); // Get the new quantity
+
+        // Calculate the new total for this item
+        const newTotal = price * quantity;
+        row.querySelector('.total-price').textContent = `₹${newTotal.toFixed(2)}`;
+
+        // Update the grand total considering selected items only
+        updateGrandTotal();
+    }
+
+    function updateGrandTotal() {
+        let grandTotal = 0;
+        document.querySelectorAll('.select-item').forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                // If the item is selected, add its total to the grand total
+                const row = checkbox.closest('tr');
+                const total = parseFloat(row.querySelector('.total-price').textContent.replace('₹', ''));
+                grandTotal += total;
+            }
+        });
+
+        // Update the displayed grand total
+        document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+    }
+
+    // Select All functionality
+    document.getElementById('selectAll').addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('.select-item');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+        // Update the grand total whenever the Select All checkbox is toggled
+        updateGrandTotal();
+    });
+
+    // Update grand total when individual checkboxes are toggled
+    document.querySelectorAll('.select-item').forEach(checkbox => {
+        checkbox.addEventListener('change', updateGrandTotal);
+    });
+</script>
+
+
 {% endblock %}
