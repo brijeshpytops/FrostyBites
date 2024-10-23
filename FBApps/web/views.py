@@ -1,13 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db import transaction
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.mail import send_mail
 from django.conf import settings
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 from functools import wraps
 
 from FBApps.customers.models import Customers, CustomerProfile
-from FBApps.web.models import Cakes, Categories, CustomizeCake, Cart
+from FBApps.web.models import Cakes, Categories, CustomizeCake, Cart,Order, OrderItem
 from FBApps.master.helpers.UNIQUE.checkPassword import is_valid_password
 from FBApps.master.helpers.UNIQUE.JWTToken import create_jwt_token, decode_jwt_token
 from FBApps.master.helpers.UNIQUE.createOtp import generate_otp
@@ -15,6 +19,8 @@ from .emailHelpers import send_activation_email
 
 import time
 import jwt
+import json
+
 
 
 
@@ -266,6 +272,58 @@ def add_to_cart(request, cake_id):
     add_item.save()
     messages.success(request, "Cake added to cart successfully.")
     return redirect('cart_view')
+@login_required
+@require_POST
+def update_cart_quantity(request):
+    try:
+        data = json.loads(request.body)
+        cart_id = data.get('cart_id')
+        quantity = data.get('quantity')
+        new_total = data.get('new_total')
+
+        # Update the cart item quantity
+        cart_item = Cart.objects.get(cart_id=cart_id)
+        cart_item.quantity = quantity
+        cart_item.subtotal = new_total
+        cart_item.save()
+
+        return JsonResponse({'success': True})
+    except Cart.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Cart item not found'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+@login_required
+@csrf_exempt
+def place_order(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        cart_ids = data.get('cart_ids', [])
+        
+
+        if not cart_ids:
+            return JsonResponse({'success': False, 'message': 'No cart items selected.'})
+        
+        grandTotal = 0
+        for cart_id in cart_ids:
+            get_cart_item = Cart.objects.get(cart_id=cart_id)
+            grandTotal += get_cart_item.subtotal
+
+        new_order = Order.objects.create(
+            customer_id=request.session['customer_id'],
+            grand_total=grandTotal
+        )
+        new_order.save()
+            
+
+        # Process the selected cart items and create an order
+        # For example, you can save the order to the database
+        # Here, just a simple response for demonstration
+        # Replace this with your order processing logic
+        # Example: Order.objects.create(cart_ids=cart_ids, ...)
+
+        return JsonResponse({'success': True, 'message': 'Order placed successfully.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 
 @login_required

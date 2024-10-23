@@ -20,14 +20,14 @@ Carts
                     <th class="w-3/12 px-4 py-2 text-left">Cake</th>
                     <th class="w-2/12 px-4 py-2 text-left">Quantity</th>
                     <th class="w-2/12 px-4 py-2 text-left">Price</th>
-                    <th class="w-2/12 px-4 py-2 text-left">Total</th>
+                    <th class="w-2/12 px-4 py-2 text-left">Sub-Total</th>
                     <th class="w-2/12 px-4 py-2 text-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% if total_items %}
                 {% for cart_item in cart_items %}
-                <tr class="border-t">
+                <tr class="border-t"  data-cart-id="{{ cart_item.cart_id }}">
                     <td class="px-4 py-2">
                         <input type="checkbox" class="form-checkbox select-item">
                     </td>
@@ -36,7 +36,7 @@ Carts
                         {{ cart_item.cake.name }}
                     </td>
                     <td class="px-4 py-2">
-                        <input type="number" min="1" value="{{ cart_item.quantity }}" onchange="updateTotal(this)" class="w-16 p-2 border rounded-md text-center" data-price="{{ cart_item.cake.price }}">
+                        <input type="number" min="1" value="{{ cart_item.quantity }}" onchange="updateTotal(this)" class="w-16 p-2 border rounded-md text-center" data-price="{{ cart_item.subtotal }}">
                     </td>
                     <td class="px-4 py-2">₹{{ cart_item.cake.price }}</td>
                     <td class="px-4 py-2 total-price">₹{{ cart_item.cake.price }}</td>
@@ -55,60 +55,135 @@ Carts
     </div>
     {% if total_items %}
     <div class="flex justify-between items-center mt-4">
-        <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+        <button id="placeOrderBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
             Place Order
         </button>
         <div class="text-right">
             <span class="text-xl font-bold">Total: ₹<span id="grandTotal">0.00</span></span>
         </div>
     </div>
+    
     {% endif %}
 </div>
 
 <script>
+
+    const csrfToken = '{{ csrf_token }}';
     function updateTotal(inputElement) {
-        const row = inputElement.closest('tr'); // Get the closest table row
-        const price = parseFloat(inputElement.getAttribute('data-price')); // Get the price from data attribute
-        const quantity = parseInt(inputElement.value); // Get the new quantity
+    const row = inputElement.closest('tr');
+    const cartItemId = row.getAttribute('data-cart-id'); // Get the cart item ID from a data attribute
+    const price = parseFloat(inputElement.getAttribute('data-price'));
+    const quantity = parseInt(inputElement.value);
 
-        // Calculate the new total for this item
-        const newTotal = price * quantity;
-        row.querySelector('.total-price').textContent = `₹${newTotal.toFixed(2)}`;
+    // Calculate the new total for this item
+    const newTotal = price * quantity;
+    row.querySelector('.total-price').textContent = `₹${newTotal.toFixed(2)}`;
 
-        // Update the grand total considering selected items only
-        updateGrandTotal();
-    }
+    // Update the grand total considering selected items only
+    updateGrandTotal();
 
-    function updateGrandTotal() {
-        let grandTotal = 0;
-        document.querySelectorAll('.select-item').forEach((checkbox, index) => {
-            if (checkbox.checked) {
-                // If the item is selected, add its total to the grand total
-                const row = checkbox.closest('tr');
-                const total = parseFloat(row.querySelector('.total-price').textContent.replace('₹', ''));
-                grandTotal += total;
-            }
-        });
+    // Send an AJAX request to update the cart quantity
+    updateCartQuantity(cartItemId, quantity, newTotal);
+}
 
-        // Update the displayed grand total
-        document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
-    }
+function updateCartQuantity(cartItemId, quantity, newTotal) {
+    // Send the updated quantity to the server using fetch
+    fetch('/update-cart-quantity/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}', // Make sure the CSRF token is included
+        },
+        body: JSON.stringify({
+            cart_id: cartItemId,
+            quantity: quantity,
+            new_total: newTotal
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Cart quantity updated successfully');
+        } else {
+            console.error('Failed to update cart quantity');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
-    // Select All functionality
-    document.getElementById('selectAll').addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('.select-item');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
-        });
-        // Update the grand total whenever the Select All checkbox is toggled
-        updateGrandTotal();
+function updateGrandTotal() {
+    let grandTotal = 0;
+    document.querySelectorAll('.select-item').forEach((checkbox, index) => {
+        if (checkbox.checked) {
+            const row = checkbox.closest('tr');
+            const total = parseFloat(row.querySelector('.total-price').textContent.replace('₹', ''));
+            grandTotal += total;
+        }
     });
 
-    // Update grand total when individual checkboxes are toggled
+    // Update the displayed grand total
+    document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+}
+
+// Select All functionality
+document.getElementById('selectAll').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.select-item');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = this.checked;
+    });
+    updateGrandTotal();
+});
+
+// Update grand total when individual checkboxes are toggled
+document.querySelectorAll('.select-item').forEach(checkbox => {
+    checkbox.addEventListener('change', updateGrandTotal);
+});
+
+document.getElementById('placeOrderBtn').addEventListener('click', function() {
+    // Gather selected cart_id's
+    const selectedCartIds = [];
     document.querySelectorAll('.select-item').forEach(checkbox => {
-        checkbox.addEventListener('change', updateGrandTotal);
+        if (checkbox.checked) {
+            const row = checkbox.closest('tr');
+            const cartId = row.getAttribute('data-cart-id');
+            selectedCartIds.push(cartId);
+        }
     });
-</script>
 
+    if (selectedCartIds.length === 0) {
+        alert('Please select at least one item to place an order.');
+        return;
+    }
+
+    // Send the selected cart_id's to the server using fetch
+    fetch('/place-order/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify({
+            cart_ids: selectedCartIds,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Order placed successfully!');
+            window.location.reload(); // Optionally reload the page or redirect to another page
+        } else {
+            alert('Failed to place the order. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while placing the order.');
+    });
+});
+
+
+</script>
 
 {% endblock %}

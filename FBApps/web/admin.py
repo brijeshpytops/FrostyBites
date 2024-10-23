@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Categories, Cakes, CustomizeCake
+from .models import Categories, Cakes, CustomizeCake, Cart
 # Register your models here.
 
 class CategoriesAdmin(admin.ModelAdmin):
@@ -35,3 +35,5 @@ class CustomizeCakeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(CustomizeCake, CustomizeCakeAdmin)
+
+admin.site.register(Cart)

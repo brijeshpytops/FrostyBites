@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from FBApps.customers.models import Customers
 from FBApps.master.models import TimeStamp
 from FBApps.master.helpers.UNIQUE.createPrimaryKey import generatePrimaryKey
@@ -57,15 +58,16 @@ class Cart(TimeStamp):
     customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
     cake = models.ForeignKey(Cakes, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
 
     def save(self, *args, **kwargs):
         if not self.pk:
             self.cart_id = generatePrimaryKey(self.POSTFIX)
+            self.subtotal = self.cake.price * self.quantity
+
+        
         super(Cart, self).save(*args, **kwargs)
 
-    
-from django.db import models
-from django.utils import timezone
 
 class Order(models.Model):
     ORDER_STATUS_CHOICES = [
