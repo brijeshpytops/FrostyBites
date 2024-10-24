@@ -147,3 +147,8 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'brijeshgondaliya.tops@gmail.com'
 EMAIL_HOST_PASSWORD = 'ziplkqwfgaxpmetm'
+
+# Razorpay config
+
+RZP_KEY_ID = 'rzp_test_2Pc4rL6Z9FgBLp'
+RZP_KEY_SECRET = '1LB8Ci3s7pzRR06YSdEKCWZz'

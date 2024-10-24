@@ -36,10 +36,10 @@ Carts
                         {{ cart_item.cake.name }}
                     </td>
                     <td class="px-4 py-2">
-                        <input type="number" min="1" value="{{ cart_item.quantity }}" onchange="updateTotal(this)" class="w-16 p-2 border rounded-md text-center" data-price="{{ cart_item.subtotal }}">
+                        <input type="number" min="1" value="{{ cart_item.quantity }}" onchange="updateTotal(this)" class="w-16 p-2 border rounded-md text-center" data-price="{{ cart_item.cake.price }}">
                     </td>
                     <td class="px-4 py-2">₹{{ cart_item.cake.price }}</td>
-                    <td class="px-4 py-2 total-price">₹{{ cart_item.cake.price }}</td>
+                    <td class="px-4 py-2 total-price">₹{{ cart_item.subtotal }}</td>
                     <td class="px-4 py-2 text-right">
                         <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Remove</button>
                     </td>
@@ -55,8 +55,8 @@ Carts
     </div>
     {% if total_items %}
     <div class="flex justify-between items-center mt-4">
-        <button id="placeOrderBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-            Place Order
+        <button id="placeOrderRZPPay" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Place Order & Pay with Razorpay
         </button>
         <div class="text-right">
             <span class="text-xl font-bold">Total: ₹<span id="grandTotal">0.00</span></span>
@@ -65,7 +65,7 @@ Carts
     
     {% endif %}
 </div>
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 
     const csrfToken = '{{ csrf_token }}';
@@ -141,7 +141,7 @@ document.querySelectorAll('.select-item').forEach(checkbox => {
     checkbox.addEventListener('change', updateGrandTotal);
 });
 
-document.getElementById('placeOrderBtn').addEventListener('click', function() {
+document.getElementById('placeOrderRZPPay').addEventListener('click', function() {
     // Gather selected cart_id's
     const selectedCartIds = [];
     document.querySelectorAll('.select-item').forEach(checkbox => {
@@ -169,19 +169,33 @@ document.getElementById('placeOrderBtn').addEventListener('click', function() {
         }),
     })
     .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Order placed successfully!');
-            window.location.reload(); // Optionally reload the page or redirect to another page
-        } else {
-            alert('Failed to place the order. Please try again.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while placing the order.');
-    });
+    .then((result) => {
+            console.log("----->",result)
+            if (result.success) {
+                var options = {
+                    key: "rzp_test_2Pc4rL6Z9FgBLp",
+                    amount: result.amount,
+                    currency: result.currency,
+                    name: "Acme Corp",
+                    description: "Test Transaction",
+                    order_id: result.razorpay_order_id,
+                    handler: function (response) {
+                        alert("Payment Successful! Razorpay Payment ID: " + response.razorpay_payment_id);
+                        location.reload();
+                    },
+                    theme: { color: "#3399cc" }
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+            } else {
+                alert(result.message);
+            }
+        })
+        .catch((err) => console.error('Error:', err));
 });
+
+
+
 
 
 </script>

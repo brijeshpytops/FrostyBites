@@ -20,9 +20,9 @@ from .emailHelpers import send_activation_email
 import time
 import jwt
 import json
+import razorpay
 
-
-
+client = razorpay.Client(auth=(settings.RZP_KEY_ID, settings.RZP_KEY_SECRET))
 
 def login_required(view_func):
     @wraps(view_func)
@@ -284,7 +284,7 @@ def update_cart_quantity(request):
         # Update the cart item quantity
         cart_item = Cart.objects.get(cart_id=cart_id)
         cart_item.quantity = quantity
-        cart_item.subtotal = new_total
+        cart_item.subtotal = cart_item.cake.price * quantity
         cart_item.save()
 
         return JsonResponse({'success': True})
@@ -299,30 +299,58 @@ def place_order(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         cart_ids = data.get('cart_ids', [])
-        
 
         if not cart_ids:
             return JsonResponse({'success': False, 'message': 'No cart items selected.'})
         
         grandTotal = 0
         for cart_id in cart_ids:
-            get_cart_item = Cart.objects.get(cart_id=cart_id)
-            grandTotal += get_cart_item.subtotal
-
+            try:
+                get_cart_item = Cart.objects.get(cart_id=cart_id)
+                grandTotal += get_cart_item.subtotal
+            except Cart.DoesNotExist:
+                return JsonResponse({'success': False, 'message': f'Cart item with id {cart_id} does not exist.'})
+        
+        # Create new order
         new_order = Order.objects.create(
             customer_id=request.session['customer_id'],
-            grand_total=grandTotal
+            total_amount=grandTotal
         )
         new_order.save()
-            
 
-        # Process the selected cart items and create an order
-        # For example, you can save the order to the database
-        # Here, just a simple response for demonstration
-        # Replace this with your order processing logic
-        # Example: Order.objects.create(cart_ids=cart_ids, ...)
+        # Create order items and delete cart items
+        for cart_id in cart_ids:
+            get_cart_item = Cart.objects.get(cart_id=cart_id)
+            OrderItem.objects.create(
+                order=new_order,
+                cake=get_cart_item.cake,
+                quantity=get_cart_item.quantity,
+                price=get_cart_item.subtotal
+            )
+            get_cart_item.delete()
 
-        return JsonResponse({'success': True, 'message': 'Order placed successfully.'})
+        # Convert amount to paise for Razorpay
+        amount = int(grandTotal * 100)
+        data = {
+            "amount": amount,
+            "currency": "INR",
+            "receipt": "order_rcptid_11",
+            "payment_capture": 1
+        }
+
+        print(amount)
+        print(data)
+
+        # Create Razorpay order
+        try:
+            razorpay_order = client.order.create(data=data)
+            print(razorpay_order)
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f'Error creating Razorpay order: {str(e)}'})
+
+        # Return the Razorpay order details to the frontend
+        return JsonResponse({'success': True, 'razorpay_order_id': razorpay_order['id'], 'amount': razorpay_order['amount'], 'currency': razorpay_order['currency'], 'message': 'Order placed successfully.'})
+
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 

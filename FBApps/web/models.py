@@ -90,7 +90,7 @@ class Order(models.Model):
         super(Order, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'Order {self.order_id} - {self.customer.name}'
+        return f'Order {self.order_id}'
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
