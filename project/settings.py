@@ -41,13 +41,16 @@ INSTALLED_APPS = [
 ]
 
 CUSTOM_APPS = [
+    # web app's
     'FBApps.master',
     'FBApps.web',
-    'FBApps.customers'
+    'FBApps.customers',
+    # web api's
+    'FBAPIS.customer_requests'
 ]
 
 THIRD_PARTY_APPS = [
-
+    'rest_framework',
 ]
 
 INSTALLED_APPS += CUSTOM_APPS

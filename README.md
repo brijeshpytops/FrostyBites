@@ -97,3 +97,20 @@ step-1] <form  action="#" method="post" enctype="multipart/form-data">
 step-2] {% csrf_token %}
 step-3] make sure name attribute in your every Input fields : <input type="email" name="email" />
 step-4] <button type="submit"></button>
+
+
+API's Docs:
+
+API's status_code : https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+
+LISTAPIS:
+
+POST : Insert new data 
+GET : get all data
+
+DETAILAPIS
+
+GET : get specific data 
+PUT : update specific data [* required all fields ]
+PATCH : update specific data [* partially fields required ]
+DELETE : delete specific data
