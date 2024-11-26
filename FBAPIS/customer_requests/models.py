@@ -5,7 +5,7 @@ from FBApps.master.helpers.UNIQUE.createPrimaryKey import generatePrimaryKey
 
 
 class CustomerRequests(TimeStamp):
-    request_id = models.CharField(primary_key=True, max_length=255, blank=False, null=False)
+    request_id = models.CharField(primary_key=True, max_length=255, blank=True, null=False)
     customer_id = models.CharField(max_length=255, null=False, blank=False)
     messages = models.TextField()
 
