@@ -114,3 +114,6 @@ GET : get specific data
 PUT : update specific data [* required all fields ]
 PATCH : update specific data [* partially fields required ]
 DELETE : delete specific data
+
+
+https://<github-username>:<token>@github.com/brijeshpytops/FrostyBites.git

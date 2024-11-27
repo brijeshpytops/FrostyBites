@@ -91,12 +91,28 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'local_FB.db',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'fbapps$frostybites',
+        'USER': 'fbapps',
+        'PASSWORD': 'Test@1234',
+        'HOST': 'fbapps.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
     }
 }
+
+
+
+if DEBUG:
+
+    DATABASES = {
+    'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'local_FB.db',
+        }
+    }
 
 
 # Password validation
