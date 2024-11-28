@@ -268,7 +268,19 @@ def customer_support_view(request):
             created_request = response.json()
             messages.success(request, f"Successfully submited your request with ID: {created_request['request_id']}")
             return redirect('customer_support_view')
-    return render(request, 'web/customer_support.html')
+        
+
+    getSpecificCustomerRequests = r"https://fbapps.pythonanywhere.com/api/specific-customer-requests/" + f"{request.session['customer_id']}"
+    
+    response = requests.get(getSpecificCustomerRequests)
+    if response.status_code == 200:
+        customer_requests = response.json()
+        context = {
+            'customer_requests': customer_requests,
+            'total_requests': len(customer_requests)
+        }
+        print(context['customer_requests']['requests'])
+        return render(request, 'web/customer_support.html', context)
 
 @login_required
 def cart_view(request):
