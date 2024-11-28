@@ -21,6 +21,7 @@ import time
 import jwt
 import json
 import razorpay
+import requests
 
 client = razorpay.Client(auth=(settings.RZP_KEY_ID, settings.RZP_KEY_SECRET))
 
@@ -250,6 +251,24 @@ def removeCustomCake(request, cake_id):
     get_cake.delete()
     messages.success(request, "Your custom cake request has been removed successfully.")
     return redirect('custom_cake_view')
+
+@login_required
+def customer_support_view(request):
+    requestListAPIURL = r'https://fbapps.pythonanywhere.com/api/requests/'
+    # https://fbapps.pythonanywhere.com/api/request/{request_id}
+
+    if request.method == 'POST':
+        new_request = {
+            'customer_id': request.session['customer_id'],
+            'messages': request.POST['message']
+        }
+
+        response = requests.post(requestListAPIURL, json=new_request)
+        if response.status_code == 201:
+            created_request = response.json()
+            messages.success(request, f"Successfully submited your request with ID: {created_request['request_id']}")
+            return redirect('customer_support_view')
+    return render(request, 'web/customer_support.html')
 
 @login_required
 def cart_view(request):

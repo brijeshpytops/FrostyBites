@@ -20,6 +20,27 @@ def CustomerRequestsListAPI(request):
         querySet = CustomerRequests.objects.all()
         serializer = CustomerRequestSerializer(querySet, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+    
+@api_view(['GET'])
+def specificCustomerRequestsListAPI(request):
+    customer_id = request.session['customer_id']
+
+    if not customer_id:
+        return Response(
+            {"error": "Customer ID not found in session."},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
+    
+    customer_requests = CustomerRequests.objects.filter(customer_id=customer_id)
+    if not customer_requests.exists():
+        return Response(
+            {"message": "No requests found for this customer."},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    serializer = CustomerRequestSerializer(customer_requests, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def CustomerRequestsDetailAPI(request, request_id):
