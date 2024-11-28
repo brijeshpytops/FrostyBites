@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -22,24 +23,30 @@ def CustomerRequestsListAPI(request):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
     
 @api_view(['GET'])
-def specificCustomerRequestsListAPI(request):
-    customer_id = request.session['customer_id']
+def specificCustomerRequestsListAPI(request, customer_id):
+    try:
+        # Fetch customer requests for the specific customer_id
+        customer_requests = CustomerRequests.objects.filter(customer_id=customer_id).values(
+            'request_id', 'customer_id', 'messages', 'created_at', 'updated_at'
+        )
+        
+        # Convert queryset to list of dictionaries
+        customer_requests_list = list(customer_requests)
 
-    if not customer_id:
-        return Response(
-            {"error": "Customer ID not found in session."},
-            status=status.HTTP_401_UNAUTHORIZED
-        )
-    
-    customer_requests = CustomerRequests.objects.filter(customer_id=customer_id)
-    if not customer_requests.exists():
-        return Response(
-            {"message": "No requests found for this customer."},
-            status=status.HTTP_404_NOT_FOUND
-        )
-    
-    serializer = CustomerRequestSerializer(customer_requests, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+        if customer_requests_list:
+            return JsonResponse({
+                "status": "success",
+                "customer_id": customer_id,
+                "requests": customer_requests_list
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": "error",
+                "message": "No requests found for this customer."
+            }, status=404)
+
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
 
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
