@@ -15,6 +15,7 @@ urlpatterns = [
     path('custom-cake/', custom_cake_view, name='custom_cake_view'),
     path('remove-Custom-Cake/<str:cake_id>', removeCustomCake, name='removeCustomCake'),
     path('customer-support/', customer_support_view, name='customer_support_view'),
+    path('delete_cutomer_request/<str:request_id>', delete_cutomer_request, name='delete_cutomer_request'),
     path('carts/', cart_view, name='cart_view'),
     path('place-order/', place_order, name='place_order'),
     path('add_to_cart/<str:cake_id>',add_to_cart, name='add_to_cart'),

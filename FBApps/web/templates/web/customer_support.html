@@ -14,7 +14,7 @@ Customer Supports
     >
       <div class="container px-5 mx-auto">
         <div
-          class="lg:w-6/12 md:w-8/12 sm:w-full bg-white rounded-lg p-8 flex flex-col mx-auto w-full mt-10 md:mt-0 relative z-10 shadow-md"
+          class="lg:w-10/12 md:w-10/12 sm:w-full bg-white rounded-lg p-8 flex flex-col mx-auto w-full mt-10 md:mt-0 relative z-10 shadow-md"
         >
         <form action="{% url 'customer_support_view' %}" method="post">
             {% csrf_token %}
@@ -38,9 +38,39 @@ Customer Supports
               Submit
             </button>
         </form>
+        <div class="overflow-x-auto my-5">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 bg-gray-50">Request-Date</th>
+                <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 bg-gray-50">Request ID</th>
+                <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 bg-gray-50">Message</th>
+                <th class="px-4 py-2 border-b text-left text-sm font-medium text-gray-600 bg-gray-50">Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if customer_requests %}
+              {% for customer_request in customer_requests.requests %}
+              <tr class="bg-white hover:bg-gray-50">
+                <td class="px-4 py-2 border-b text-sm text-gray-700">{{customer_request.created_at}}</td>
+                <td class="px-4 py-2 border-b text-sm text-gray-700">{{customer_request.request_id}}</td>
+                <td class="px-4 py-2 border-b text-sm text-gray-700">{{customer_request.messages}}</td>
+                <td class="px-4 py-2 border-b text-sm text-gray-700"><a href="{% url 'delete_cutomer_request' request_id=customer_request.request_id %}"><i class="fa-solid fa-x"></i></a></td>
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="5" class="text-center py-3">No customer requests found.</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
         </div>
       </div>
     </div>
+
   </section>
+
   
 {% endblock %}

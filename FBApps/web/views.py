@@ -17,11 +17,13 @@ from FBApps.master.helpers.UNIQUE.JWTToken import create_jwt_token, decode_jwt_t
 from FBApps.master.helpers.UNIQUE.createOtp import generate_otp
 from .emailHelpers import send_activation_email
 
+
 import time
 import jwt
 import json
 import razorpay
 import requests
+import datetime
 
 client = razorpay.Client(auth=(settings.RZP_KEY_ID, settings.RZP_KEY_SECRET))
 
@@ -274,13 +276,22 @@ def customer_support_view(request):
     
     response = requests.get(getSpecificCustomerRequests)
     if response.status_code == 200:
-        customer_requests = response.json()
+        # Simulated response for demonstration purposes
+        customer_requests = response.json()  
         context = {
             'customer_requests': customer_requests,
             'total_requests': len(customer_requests)
         }
-        print(context['customer_requests']['requests'])
         return render(request, 'web/customer_support.html', context)
+
+
+@login_required
+def delete_cutomer_request(request, request_id):
+    url = f'https://fbapps.pythonanywhere.com/api/request/{request_id}'
+    response = requests.delete(url)
+    if response.status_code == 204:  # No Content
+        messages.success(request, "Your request has been deleted successfully.")
+        return redirect('customer_support_view')
 
 @login_required
 def cart_view(request):
